@@ -175,11 +175,17 @@ p:last-of-type {
 <!-- The actual HTML. There is not much of it. -->
 
   </head>
+  <!--
+    <div class="internal-links" style="width: 600px; margin-left: auto; margin-right: auto; font-weight: bold; font-size: 2em;">
+      <a href="https://damagedgoods.me" target="_blank">Home</a>
+      <a href="https://chitchatter.im/private/52a30f89-16ec-4533-8329-f100f62ea620" target="_blank">Chatter</a>
+      <a href="https://damagedgoods.me" target="_blank">Shop (Coming Soon!)</a>
+    </div>
+  -->
   <body>
     <form id="name-form" action="/fake-form-action">
-      <input id="name-input" placeholder="your name">
-      <p>This chat runs entirely on the edge, powered by<br>
-        <a href="https://blog.cloudflare.com/introducing-workers-durable-objects" target="_blank">Cloudflare Workers Durable Objects</a></p>
+      <p style="font-weight: bold; font-size: 1.4em;">Chat App (BETA)</p>
+      <input id="name-input" placeholder="Enter your name...">
     </form>
     <form id="room-form" action="/fake-form-action">
       <p>Enter a public room:</p>
@@ -423,25 +429,27 @@ function join() {
       // All pre-join messages have been delivered.
       if (!wroteWelcomeMessages) {
         wroteWelcomeMessages = true;
-        addChatMessage(null,
-            "* This is a demo app built with Cloudflare Workers Durable Objects. The source code " +
-            "can be found at: https://github.com/cloudflare/workers-chat-demo");
-        addChatMessage(null,
-            "* WARNING: Participants in this chat are random people on the internet. " +
-            "Names are not authenticated; anyone can pretend to be anyone. The people " +
-            "you are chatting with are NOT Cloudflare employees. Chat history is saved.");
+        //  addChatMessage(null,
+        //    "* This is a demo app built with Cloudflare Workers Durable Objects. The source code " +
+        //    "can be found at: https://github.com/cloudflare/workers-chat-demo");
+        //addChatMessage(null,
+        //    "* WARNING: Participants in this chat are random people on the internet. " +
+        //   "Names are not authenticated; anyone can pretend to be anyone. The people " +
+        //    "you are chatting with are NOT Cloudflare employees. Chat history is saved.");
         if (roomname.length == 64) {
           addChatMessage(null,
-              "* This is a private room. You can invite someone to the room by sending them the URL.");
+        //      "* This is a private room. You can invite someone to the room by sending them the URL.");
+        "");
         } else {
           addChatMessage(null,
-              "* Welcome to #" + roomname + ". Say hi!");
+        //      "* Welcome to #" + roomname + ". Say hi!");
+        "");
         }
       }
     } else {
       // A regular chat message.
       if (data.timestamp > lastSeenTimestamp) {
-        addChatMessage(data.name, data.message);
+        addChatMessage(data.name, data.message, data.timestamp);
         lastSeenTimestamp = data.timestamp;
       }
     }
@@ -457,15 +465,26 @@ function join() {
   });
 }
 
-function addChatMessage(name, text) {
+function addChatMessage(name, text, time) {
   let p = document.createElement("p");
   if (name) {
     let tag = document.createElement("span");
+    let timestamp = new Date(time).toLocaleTimeString();
     tag.className = "username";
-    tag.innerText = name + ": ";
+    //Adding the timestamp to the beginning of the name. 
+    tag.innerText = "[" + timestamp + "] " + name + ": ";
     p.appendChild(tag);
   }
   p.appendChild(document.createTextNode(text));
+  
+  // If the name of the text poster is the same as the username logged in, align the text to
+  // the right.
+  //if(username = name) {
+  //  p.style.textAlign = "right";
+  //} else {
+  //  p.style.textAlign = "left";
+  //}
+  
 
   // Append the new chat line, making sure that if the chatlog was scrolled to the bottom
   // before, it remains scrolled to the bottom, and otherwise the scroll position doesn't
