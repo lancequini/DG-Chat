@@ -429,6 +429,11 @@ function join() {
       // All pre-join messages have been delivered.
       if (!wroteWelcomeMessages) {
         wroteWelcomeMessages = true;
+
+        //Scrolls to the bottom of the page on initial load.
+        chatlog.scrollTop = chatlog.scrollHeight;
+        isAtBottom = true;
+        
         //  addChatMessage(null,
         //    "* This is a demo app built with Cloudflare Workers Durable Objects. The source code " +
         //    "can be found at: https://github.com/cloudflare/workers-chat-demo");
