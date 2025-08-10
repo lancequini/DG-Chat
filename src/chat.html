@@ -168,6 +168,9 @@ p:last-of-type {
 #go-private {
   width: 20em;
 }
+#delete-message {
+  float: right;
+}
 
 </style>
 
@@ -218,6 +221,7 @@ let chatroom = document.querySelector("#chatroom");
 let chatlog = document.querySelector("#chatlog");
 let chatInput = document.querySelector("#chat-input");
 let roster = document.querySelector("#roster");
+let delButton = document.querySelector("#delete-message");
 
 // Is the chatlog scrolled to the bottom?
 let isAtBottom = true;
@@ -277,6 +281,10 @@ function startRoomChooser() {
     if (roomname.length > 0) {
       startChat();
     }
+  });
+
+  delButton.addEventListener("click", event => {
+    //Add logic to remove the text here.
   });
 
   goPrivateButton.addEventListener("click", async event => {
@@ -433,7 +441,7 @@ function join() {
         //Scrolls to the bottom of the page on initial load.
         chatlog.scrollTop = chatlog.scrollHeight;
         isAtBottom = true;
-        
+
         //  addChatMessage(null,
         //    "* This is a demo app built with Cloudflare Workers Durable Objects. The source code " +
         //    "can be found at: https://github.com/cloudflare/workers-chat-demo");
@@ -481,6 +489,11 @@ function addChatMessage(name, text, time) {
     p.appendChild(tag);
   }
   p.appendChild(document.createTextNode(text));
+
+  //Create a delete button and add it to the text line. This will likeley be changed to a
+  //radial button in the future that will allow a user to select a delete button at the top
+  //of the page and select which text to delete. This will create a cleaner UI. 
+  p.appendChild(delButton);
   
   // If the name of the text poster is the same as the username logged in, align the text to
   // the right.
