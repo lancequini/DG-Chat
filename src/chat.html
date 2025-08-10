@@ -168,9 +168,6 @@ p:last-of-type {
 #go-private {
   width: 20em;
 }
-#delete-message {
-  float: right;
-}
 
 </style>
 
@@ -221,7 +218,6 @@ let chatroom = document.querySelector("#chatroom");
 let chatlog = document.querySelector("#chatlog");
 let chatInput = document.querySelector("#chat-input");
 let roster = document.querySelector("#roster");
-let delButton = document.querySelector("#delete-message");
 
 // Is the chatlog scrolled to the bottom?
 let isAtBottom = true;
@@ -281,10 +277,6 @@ function startRoomChooser() {
     if (roomname.length > 0) {
       startChat();
     }
-  });
-
-  delButton.addEventListener("click", event => {
-    //Add logic to remove the text here.
   });
 
   goPrivateButton.addEventListener("click", async event => {
@@ -493,7 +485,11 @@ function addChatMessage(name, text, time) {
   //Create a delete button and add it to the text line. This will likeley be changed to a
   //radial button in the future that will allow a user to select a delete button at the top
   //of the page and select which text to delete. This will create a cleaner UI. 
-  p.appendChild(delButton);
+  let deleteButton = document.createElement("button");
+  deleteButton.id = 'deleteButton';
+  deleteButton.style.float = 'right';
+  deleteButton.appendChild(document.createTextNode("Del"));
+  p.appendChild(deleteButton);
   
   // If the name of the text poster is the same as the username logged in, align the text to
   // the right.
