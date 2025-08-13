@@ -489,10 +489,11 @@ function addChatMessage(name, text, time) {
   deleteButton.id = 'deleteButton';
   deleteButton.style.float = 'right';
   deleteButton.appendChild(document.createTextNode("Del"));
+  deleteButton.addEventListener("click", () => deleteChatMessage(p, time));
   p.appendChild(deleteButton);
   
   // If the name of the text poster is the same as the username logged in, align the text to
-  // the right.
+  // the right. Impliment this later after radio buttons are used for deleting messages.
   //if(username = name) {
   //  p.style.textAlign = "right";
   //} else {
@@ -506,6 +507,14 @@ function addChatMessage(name, text, time) {
   chatlog.appendChild(p);
   if (isAtBottom) {
     chatlog.scrollBy(0, 1e8);
+  }
+}
+
+
+//Sends a delete WebSocket request to the server to remove a message. 
+function deleteChatMessage(p, time){
+  if (currentWebSocket) {
+    currentWebSocket.send(JSON.stringify({ delete: time }));
   }
 }
 
