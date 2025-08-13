@@ -1,4 +1,4 @@
-name = "dg-chat"
+name = "dg-chat-dev"
 compatibility_date = "2024-01-01"
 
 main = "src/chat.mjs"
