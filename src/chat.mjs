@@ -372,36 +372,6 @@ export class ChatRoom {
         return;
       }
 
-
-      // === Handle delete request ===
-      if (data.delete) {
-        let timestamp = data.delete;
-
-        // Find storage key
-        let key = new Date(timestamp).toISOString();
-        let storedMessage = await this.storage.get(key);
-        if (!storedMessage) return; // not found
-
-        let parsed = JSON.parse(storedMessage);
-
-        // Only allow delete if the sender matches
-        if (parsed.name !== session.name) {
-          webSocket.send(JSON.stringify({ error: "You can only delete your own messages." }));
-          return;
-        }
-
-        // Replace message text
-        parsed.message = "[deleted]";
-        let updatedStr = JSON.stringify(parsed);
-
-        // Update storage
-        await this.storage.put(key, updatedStr);
-
-        // Broadcast update to all clients
-        this.broadcast(updatedStr);
-        return;
-      }
-
       // Construct sanitized message for storage and broadcast.
       data = { name: session.name, message: "" + data.message };
 
