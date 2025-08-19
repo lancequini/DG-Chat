@@ -372,6 +372,24 @@ export class ChatRoom {
         return;
       }
 
+      if (data.delete) {
+        // Handle delete message.
+        let messageId = data.delete;
+
+        // Find the message in the chat history.
+        let storage = await this.storage.list;
+        for (let value of storage.values()) {
+          if (value.id === messageId) {
+            // Delete it from storage.
+            await this.storage.delete(value.id);
+
+            // Broadcast the delete message to all other clients.
+            this.broadcast({delete: messageId}); 
+            break;
+          }
+        }
+      }
+
       // Construct sanitized message for storage and broadcast.
       data = { name: session.name, message: "" + data.message };
 
@@ -441,6 +459,15 @@ export class ChatRoom {
           quitters.push(session);
           this.sessions.delete(webSocket);
         }
+      } else if (message.delete) {
+        // Handle delete message.
+        let messageId = JSON.parse(message).delete;
+        
+        this.sessions.forEach((session) => {
+          if (session.blockedMessages) {
+            session.blockedMessages = session.blockedMessages.filter((msg) => msg.id !== messageId);
+          }
+        });
       } else {
         // This session hasn't sent the initial user info message yet, so we're not sending them
         // messages yet (no secret lurking!). Queue the message to be sent later.
