@@ -494,10 +494,11 @@ function addChatMessage(name, text, time) {
     deleteButton.appendChild(document.createTextNode("Del"));
     deleteButton.onclick = function() {
       // Send a delete message to the server.
-      currentWebSocket.send(JSON.stringify({delete: text}));
+      currentWebSocket.send(JSON.stringify({delete: time}));
 
       // Change the text to deleted.
-      p.innerText = "[Deleted]";
+      let timestamp = new Date(time).toLocaleTimeString();
+      p.innerText = "[" + timestamp + "] " + name + ": [Deleted]";
     }
     p.appendChild(deleteButton);
   }
