@@ -482,14 +482,18 @@ function addChatMessage(name, text, time) {
   }
   p.appendChild(document.createTextNode(text));
 
-  //Create a delete button and add it to the text line. This will likeley be changed to a
-  //radial button in the future that will allow a user to select a delete button at the top
-  //of the page and select which text to delete. This will create a cleaner UI. 
-  let deleteButton = document.createElement("button");
-  deleteButton.id = 'deleteButton';
-  deleteButton.style.float = 'right';
-  deleteButton.appendChild(document.createTextNode("Del"));
-  p.appendChild(deleteButton);
+  // Create a delete button and add it to the text line if the message was created by the user. 
+  // This will likeley be changed to a radial button in the future that will allow a user to 
+  // select a delete button at the top of the page and select which text to delete. This will 
+  // create a cleaner UI. 
+  
+  if(username == name){
+    let deleteButton = document.createElement("button");
+    deleteButton.id = 'deleteButton';
+    deleteButton.style.float = 'right';
+    deleteButton.appendChild(document.createTextNode("Del"));
+    p.appendChild(deleteButton);
+  }
   
   // If the name of the text poster is the same as the username logged in, align the text to
   // the right.
