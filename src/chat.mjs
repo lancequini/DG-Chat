@@ -381,7 +381,7 @@ export class ChatRoom {
         for (let value of storage.values()) {
           if (value.key === messageId) {
             // Delete it from storage.
-            await this.storage.delete(value.id);
+            await this.storage.delete(value.key);
 
             // Broadcast the delete message to all other clients.
             this.broadcast({delete: messageId}); 
