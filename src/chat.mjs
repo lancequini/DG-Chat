@@ -378,8 +378,8 @@ export class ChatRoom {
 
         // Find the message in the chat history.
         let storage = await this.storage.list;
-        for (let value of storage.keys()) {
-          if (value.id === messageId) {
+        for (let value of storage.values()) {
+          if (value.key === messageId) {
             // Delete it from storage.
             await this.storage.delete(value.id);
 
